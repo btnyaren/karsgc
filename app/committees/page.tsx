@@ -5,13 +5,13 @@ import CommitteeGuide from "@/app/committees/components/CommitteeGuide";
 import {Metadata} from "next"
 import Header from "@/components/Header"
 
-const committees: {name: string, guide: string, description: string}[] = [
-    {name: "Spor", guide: "", description: ""},
-    {name: "Çevre", guide: "", description: ""},
-    {name: "Sağlık", guide: "", description: ""},
-    {name: "Aile ve Sosyal Güvenlik", guide: "", description: ""},
-    {name: "Eğitim", guide: "", description: ""},
-    {name: "Kriz: Kıbrıs Savaşı", guide: "", description: ""},
+const committees: {name: string, link: string, description: string}[] = [
+    {name: "Spor", link: "", description: ""},
+    {name: "Çevre", link: "", description: ""},
+    {name: "Sağlık", link: "", description: ""},
+    {name: "Aile ve Sosyal Güvenlik", link: "", description: ""},
+    {name: "Eğitim", link: "", description: ""},
+    {name: "Kriz: Kıbrıs Savaşı", link: "", description: ""},
 ]
 
 
@@ -34,11 +34,7 @@ export default function CommitteesPage() {
                     <h2 className="text-[#500000] font-bold text-[clamp(28px,3dvw,40px)] mb-10">Komitelerimiz</h2>
                     <div className="grid grid-cols-2 gap-7 sm:gap-10 [&>div]:col-span-2 sm:[&>div]:col-span-1">
                         {committees.map(committee => (
-                            committee.guide ? <CommitteeGuide key={committee.name} name={committee.name}
-                                                              description={committee.description}
-                                                              guide={committee.guide}/> :
-                                <Committee key={committee.name} name={committee.name}
-                                           description={committee.description}/>
+                            <Committee key={committee.name} name={committee.name} description={committee.description} link={committee.link}/>
                         ))}
                     </div>
                 </div>

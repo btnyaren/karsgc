@@ -39,7 +39,7 @@ const LandingContent = () => {
                 href="https://www.instagram.com/karsgenclikcalistayi/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="absolute bottom-4 right-4 md:bottom-6 md:right-6 rounded-full border border-white/30 bg-black/60 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/80"
+                className="absolute bottom-4 right-4 md:bottom-6 md:right-6 rounded-full border border-[#ff5f7e]/40 bg-gradient-to-r from-[#ff5f7e] via-[#ff3d6a] to-[#d4003a] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(212,0,58,0.35)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_12px_30px_rgba(212,0,58,0.45)]"
             >
                 Instagram Hesabımız
             </Link>

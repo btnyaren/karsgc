@@ -4,11 +4,10 @@ import {useUser} from "@/contexts/UserContext";
 import {applicationPositions} from "@/utils";
 import {FormEventHandler} from "react";
 import useSetApplication from "@/hooks/useSetApplication";
-import {usePagination} from "@/contexts/PaginationContext";
 
 const ApplicationForm = () => {
 
-    const {user, setUser} = useUser()
+    const {user} = useUser()
     const {sender, loading, error} = useSetApplication()
 
     const position = user?.application?.position
@@ -30,11 +29,15 @@ const ApplicationForm = () => {
             <p className="font-bold text-2xl text-center mb-6">{position} başvurusu</p>
             {questions.form.map(q => {
                 const InputComponent = q.component
+                const inputProps = q.name === "email"
+                    ? {type: "email", autoComplete: "email"}
+                    : {autoComplete: "off"}
+
                 return (
                     <InputComponent
                         key={q.name}
                         name={q.name}
-                        autoComplete={"off"}
+                        {...inputProps}
                         className={"w-[clamp(230px,80dvw,400px)] px-3"}
                         label={<span className="w-[clamp(230px,80dvw,400px)] block mb-2 font-semibold text-base">{q.question}</span>}
                         required={q.required}

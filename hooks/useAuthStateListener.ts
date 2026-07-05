@@ -1,7 +1,8 @@
-import {auth, onAuthStateChanged} from "@/firebase/auth";
 import {checkUser, registerUser} from "@/firebase/firestore";
 import {User} from "@/types/user";
 import {useEffect} from "react";
+
+const STORAGE_KEY = "application-anonymous-user-id";
 
 export const useAuthStateListener = (
     setUser: (user: User | null) => void,
@@ -9,27 +10,38 @@ export const useAuthStateListener = (
 ) => {
 
     useEffect(() => {
-        onAuthStateChanged(auth,async user => {
+        const initializeUser = async () => {
             setLoading(true)
+
             try {
-                if(!user) {
-                    setUser(null)
-                    return setLoading(false)
+                const storage = typeof window !== "undefined" ? window.localStorage : null;
+                const existingId = storage?.getItem(STORAGE_KEY) || undefined;
+                const uid = existingId || (typeof crypto !== "undefined" && "randomUUID" in crypto
+                    ? crypto.randomUUID()
+                    : `anonymous-${Date.now()}`);
+
+                if (storage && !existingId) {
+                    storage.setItem(STORAGE_KEY, uid)
                 }
 
-                const data = await checkUser(user.uid)
-                if(!data) {
-                    await registerUser(user.uid, user.email!)
-                    setUser({email: user.email!, id: user.uid, application: null})
+                const data = await checkUser(uid)
+
+                if (!data) {
+                    await registerUser(uid, "")
+                    setUser({email: "", id: uid, application: null})
+                } else {
+                    setUser(data as User)
                 }
-                if(data)
-                    setUser(data as any)
 
                 setLoading(false)
             }
             catch (e) {
-                throw new Error((e as Error).message)
+                console.error(e)
+                setUser(null)
+                setLoading(false)
             }
-        })
-    }, [])
+        }
+
+        initializeUser()
+    }, [setLoading, setUser])
 }

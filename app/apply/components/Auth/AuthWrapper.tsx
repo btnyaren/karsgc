@@ -2,7 +2,6 @@
 import React, {ReactNode} from 'react'
 import {useUser} from "@/contexts/UserContext";
 import Loading from "@/components/Loading";
-import AuthForm from "@/app/apply/components/Auth/AuthForm";
 
 type AuthWrapperProps = {
     children: ReactNode
@@ -10,15 +9,12 @@ type AuthWrapperProps = {
 
 const AuthWrapper = ({children}: AuthWrapperProps) => {
 
-    const {user, loading} = useUser()
+    const {loading} = useUser()
 
     if(loading)
         return <Loading />
 
-    if(!user)
-        return <AuthForm />
-
-    return children
+    return <>{children}</>
 };
 
 export default AuthWrapper;

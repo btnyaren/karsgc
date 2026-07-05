@@ -31,6 +31,7 @@ export const applicationPositions: Position[] = [
         description: "Delegeler konferansın temelini oluştururlar. Amaçları bulundukları komitelerde fikir üreterek çözüm taslağına katkıda bulunmaktır. Bu sayede komitelerinin genel kurulda geçmesine yardımcı olurlar.",
         form: [
             {question: "Ad Soyad", name: "fullName", required: true, component: TextInput},
+            {question: "Email adresi", name: "email", required: true, component: TextInput},
             {question: "Okul", name: "school", required: true, component: TextInput},
             {question: "Sınıf", name: "grade", required: true, component: GradeInput},
             {question: "Telefon numarası", name: "phone", required: true, component: TextInput},
@@ -50,6 +51,7 @@ export const applicationPositions: Position[] = [
         description: "Komite divanları akademik tecrübeleri olan ve daha önceden delegelik yapmış, komite başkan ve yardımcısıdır.",
         form: [
             {question: "Ad Soyad", name: "fullName", required: true, component: TextInput},
+            {question: "Email adresi", name: "email", required: true, component: TextInput},
             {question: "Okul", name: "school", required: true, component: TextInput},
             {question: "Sınıf", name: "grade", required: true, component: GradeInput},
             {question: "Telefon numarası", name: "phone", required: true, component: TextInput},

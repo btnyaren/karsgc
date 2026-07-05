@@ -20,15 +20,16 @@ export default function useSetApplication() {
         setError(null)
         setLoading(true)
 
+        const email = String(formData.get("email") ?? "").trim() || null
+
         const data: User = {
             ...user!,
+            email: email || user?.email || "",
             application: {
                 ...user!.application!,
-                email: user?.email || null,
+                email,
             }
         }
-
-        console.log(formData.entries())
 
         // @ts-ignore
         for(const [key, value] of formData.entries()) {

@@ -34,6 +34,15 @@ const LandingContent = () => {
                     <span className="flex justify-center items-center aspect-square w-10 md:w-12 rounded-[999px] bg-[#6B0000] text-xl font-bold text-white">›</span>
                 </Link>
             </AnimationContainer>
+
+            <Link
+                href="https://www.instagram.com/karsgenclikcalistayi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-4 right-4 md:bottom-6 md:right-6 rounded-full border border-white/30 bg-black/60 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/80"
+            >
+                Instagram Hesabımız
+            </Link>
         </div>
     )
 }

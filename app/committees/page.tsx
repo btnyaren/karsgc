@@ -6,15 +6,12 @@ import {Metadata} from "next"
 import Header from "@/components/Header"
 
 const committees: {name: string, guide: string, description: string}[] = [
-    {name: "Dışişleri", guide: "https://www.instagram.com/p/DIBy4p1Ir7S/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "İçişleri", guide: "https://www.instagram.com/p/DIBy-csozRS/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Çevre", guide: "https://www.instagram.com/p/DIBzDJiITqO/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Eğitim", guide: "https://www.instagram.com/p/DIBzL1ko22j/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Turizm", guide: "https://www.instagram.com/p/DIBzHVVo-GQ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Sağlık", guide: "https://www.instagram.com/p/DIBzQo9Ix6H/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Ekonomi", guide: "https://www.instagram.com/p/DIBzThLIJC0/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Kriz: 93 Harbi", guide: "https://www.instagram.com/p/DIBzXXkoH_W/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
-    {name: "Kriz: Amerikan Bağımsızlık Savaşı", guide: "https://www.instagram.com/p/DIBzZujo7EJ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==", description: ""},
+    {name: "Spor", guide: "", description: ""},
+    {name: "Çevre", guide: "", description: ""},
+    {name: "Sağlık", guide: "", description: ""},
+    {name: "Aile ve Sosyal Güvenlik", guide: "", description: ""},
+    {name: "Eğitim", guide: "", description: ""},
+    {name: "Kriz: Kıbrıs Savaşı", guide: "", description: ""},
 ]
 
 

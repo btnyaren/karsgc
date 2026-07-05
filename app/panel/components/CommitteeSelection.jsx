@@ -1,13 +1,10 @@
 const komiteler = [
-    {label: "Dışişleri", value: "Dışişleri"},
-    {label: "İçişleri", value: "İçişleri"},
+    {label: "Spor", value: "Spor"},
     {label: "Çevre", value: "Çevre"},
-    {label: "Eğitim", value: "Eğitim"},
-    {label: "Turizm", value: "Turizm"},
     {label: "Sağlık", value: "Sağlık"},
-    {label: "Ekonomi", value: "Ekonomi"},
-    {label: "Kriz: 93 Harbi", value: "93 Harbi"},
-    {label: "Kriz: Amerikan Bağımsızlık Savaşı", value: "Amerikan Bağımsızlık Savaşı"},
+    {label: "Aile ve Sosyal Güvenlik", value: "Aile ve Sosyal Güvenlik"},
+    {label: "Eğitim", value: "Eğitim"},
+    {label: "Kriz: Kıbrıs Savaşı", value: "Kriz: Kıbrıs Savaşı"},
 ]
 
 const CommitteeSelection = ({ values }) => {

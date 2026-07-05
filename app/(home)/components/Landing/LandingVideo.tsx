@@ -5,7 +5,7 @@ const LandingVideo = () => {
         <>
             <div className="relative w-screen brightness-90 md:brightness-[0.35] h-[60dvh] min-h-[30rem] md:h-[70dvh] max-h-[40rem] lg:max-h-none lg:min-h-[45rem]">
                 <Image 
-                    src="/poster.webp" 
+                    src="/anasayfabanner.webp" 
                     alt="Kars Gençlik Çalıştayı" 
                     fill 
                     priority 

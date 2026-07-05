@@ -16,7 +16,7 @@ const initializeFirebaseAdmin = () => {
     });
 }
 
-/*initializeFirebaseAdmin()
+initializeFirebaseAdmin()
 
 export const getApplicationStatistics = async () => {
     const firestore = getFirestore()
@@ -32,4 +32,4 @@ export const getApplicationStatistics = async () => {
         presses: presses + 20,
         chairs: chairs + 20
     }
-}*/
+}

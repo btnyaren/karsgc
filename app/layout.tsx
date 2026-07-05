@@ -14,14 +14,7 @@ const poppins = Poppins({ subsets: ['latin'], weight: ['400','500','600','700','
 export const metadata: Metadata = {
     title: 'Kars Gençlik Çalıştayı',
     description: 'Kars’a konferans kültürü kazandıran, kalitesinden asla taviz vermeyen, Türkiye’nin en köklü ve iyi konferanslarından biri olan Kars Gençlik Çalıştayı tekrardan sizlerle!',
-    keywords: ["karsgc", "kars", "çalıştay", "gençlik çalıştayı", "konferans", "conference"],
-    icons: {
-        icon: [
-            { url: '/favicon.ico', sizes: 'any' },
-            { url: '/favicon-32x32.png', type: 'image/png' }
-        ],
-        apple: '/favicon.ico'
-    }
+    keywords: ["karsgc", "kars", "çalıştay", "gençlik çalıştayı", "konferans", "conference"]
 }
 
 export default function RootLayout({

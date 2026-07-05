@@ -20,7 +20,7 @@ const LandingContent = () => {
                 transition={{duration: 0.2, delay: 0.2}}
             >
                 <p style={{fontSize: "clamp(12px, 2dvw, 20px)", textWrap: "balance"} as object} className="my-7 font-medium max-w-2xl text-gray-200 leading-7">
-                    Kars&apos;ın ilk ve tek gençlik çalıştayı olan Kars Gençlik Çalıştayı, yeniden sizlerle!
+                    Karsın gençlik çalıştayı yeniden sizlerle!
                 </p>
             </AnimationContainer>
 

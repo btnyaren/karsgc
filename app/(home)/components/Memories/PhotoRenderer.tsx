@@ -1,34 +1,18 @@
 "use client"
 import Image from "next/image";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 
 const PhotoRenderer = () => {
 
     const [count, setCount] = useState(0)
-    const [shuffledImages, setShuffledImages] = useState<string[]>([])
-
-    // Rastgele dizi oluştur
-    const shuffleArray = (array: string[]) => {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    };
-
-    useEffect(() => {
-        // Anılar klasöründeki görseller
-        const memoryImages = [
-            '/memories/memory1.jpg',
-            '/memories/memory2.jpg',
-            '/memories/memory3.jpg',
-            '/memories/memory4.jpg'
-        ];
-        
-        // Görselleri rastgele dizle
-        setShuffledImages(shuffleArray(memoryImages));
-    }, []);
+    
+    // Anılar klasöründeki görseller - rastgele sıralanmış
+    const shuffledImages = [
+        '/memories/memory1.jpg',
+        '/memories/memory2.jpg',
+        '/memories/memory3.jpg',
+        '/memories/memory4.jpg'
+    ].sort(() => Math.random() - 0.5);
 
     const handleClick = () => {
         console.log("click")

@@ -22,11 +22,11 @@ const PhotoRenderer = () => {
     const displayEasterEgg = count >= 31
 
     return (
-        <div className="flex flex-wrap justify-evenly xsm:justify-center">
+        <div className="columns-2 gap-4 px-4 md:px-8 lg:px-16">
             {shuffledImages.map((imageSrc, index) => (
-                <div className={`shrink-0 basis-[45%] md:basis-[30%] lg:basis-[23%] relative w-96 ${!displayEasterEgg ? "h-32" : "h-48"} xsm:h-48 md:h-64 xl:h-[20rem] mx-0 sm:mx-2 rounded-xl overflow-hidden`} key={index}>
+                <div className={`shrink-0 relative w-full h-48 xsm:h-48 md:h-64 xl:h-[20rem] mb-4 rounded-xl overflow-hidden`} key={index}>
                     {index === 1 && <div className="absolute top-[30%] left-[15%] w-[22%] h-[30%] z-30 bg-transparent" onClick={handleClick}></div>}
-                    <Image className="object-contain z-20" src={imageSrc} alt={`memory-${index}`} fill />
+                    <Image className="object-cover z-20" src={imageSrc} alt={`memory-${index}`} fill />
                 </div>
             ))}
         </div>

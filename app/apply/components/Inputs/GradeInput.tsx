@@ -11,6 +11,8 @@ const options = [
     {label: "10", value: "10"},
     {label: "11", value: "11"},
     {label: "12", value: "12"},
+    {label: "Üniversite", value: "Üniversite"},
+{label: "Mezun", value: "Mezun"},
 ]
 
 const GradeInput = ({question, ...props}: GradeInputProps) => {

@@ -8,11 +8,14 @@ const PhotoRenderer = () => {
     
     // Anılar klasöründeki görseller - rastgele sıralanmış
     const shuffledImages = [
-        '/memories/memory1.jpg',
-        '/memories/memory2.jpg',
-        '/memories/memory3.jpg',
-        '/memories/memory4.jpg'
-    ].sort(() => Math.random() - 0.5);
+ 
+  '/WhatsApp Image 2026-07-07 at 16.13.48 (2).jpeg',
+  '/WhatsApp Image 2026-07-07 at 16.13.48 (3).jpeg',
+  '/WhatsApp Image 2026-07-07 at 16.13.49 (3).jpeg',
+  '/WhatsApp Image 2026-07-07 at 16.13.49 (4).jpeg',
+  '/WhatsApp Image 2026-07-07 at 16.13.49 (5).jpeg',
+  '/WhatsApp Image 2026-07-07 at 16.13.50 (1).jpeg'
+].sort(() => Math.random() - 0.5);
 
     const handleClick = () => {
         console.log("click")

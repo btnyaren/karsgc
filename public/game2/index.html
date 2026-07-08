@@ -81,14 +81,15 @@
         const scoreElement = document.getElementById("score");
         const speedElement = document.getElementById("speed"); 
 
+        // UZANTILAR VE KLASÖR YOLLARI KÖKTEN DÜZELTİLDİ
         const playerImg = new Image();
-        playerImg.src = "araba.png.jpeg"; 
+        playerImg.src = "/game2/araba.png.jpeg"; 
 
         const enemyImg = new Image();
-        enemyImg.src = "engel.png"; 
+        enemyImg.src = "/game2/engel.png.jpeg"; 
 
         const crashImg = new Image();
-        crashImg.src = "kaza.png"; 
+        crashImg.src = "/game2/kaza.png.jpeg"; 
 
         let frames = 0;
         let score = 0;
@@ -204,4 +205,86 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ecf0f1";
                 ctx.font = "bold 20px Arial";
-                ctx.fillText("GECE
+                ctx.fillText("GECE YOLCULUĞU BAŞLIYOR", 45, 260);
+                ctx.fillStyle = "#e74c3c";
+                ctx.font = "16px Arial";
+                ctx.fillText("Başlamak için Ekrana Dokun", 70, 300);
+            }
+
+            if (gameOver) {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                if(crashImg.complete && crashImg.naturalHeight !== 0) {
+                    ctx.drawImage(crashImg, canvas.width/2 - 60, 150, 120, 120);
+                }
+
+                ctx.fillStyle = "#e74c3c";
+                ctx.font = "bold 28px Arial";
+                ctx.fillText("KAZA YAPILDI!", 85, 310);
+                ctx.fillStyle = "#ecf0f1";
+                ctx.font = "16px Arial";
+                ctx.fillText(`Toplam Mesafe: ${score} km`, 110, 340);
+                ctx.fillStyle = "#f1c40f";
+                ctx.fillText("Yeniden başlamak için dokun", 75, 380);
+                return; 
+            }
+
+            if (gameActive && !gameOver) {
+                player.x += player.dx;
+                if (player.x < 30) player.x = 30; 
+                if (player.x + player.width > canvas.width - 30) player.x = canvas.width - 30 - player.width; 
+
+                for (let i = 0; i < obstacles.length; i++) {
+                    let obs = obstacles[i];
+                    obs.y += gameSpeed; 
+
+                    if(enemyImg.complete && enemyImg.naturalHeight !== 0) {
+                        ctx.drawImage(enemyImg, obs.x, obs.y, obs.width, obs.height);
+                    } else {
+                        ctx.fillStyle = "#3498db";
+                        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                    }
+
+                    if (
+                        player.x < obs.x + obs.width &&
+                        player.x + player.width > obs.x &&
+                        player.y < obs.y + obs.height &&
+                        player.y + player.height > obs.y
+                    ) {
+                        gameOver = true; 
+                    }
+
+                    if (obs.y > canvas.height) {
+                        obstacles.splice(i, 1);
+                        score += 10;
+                        scoreElement.innerText = score;
+                        i--; 
+                        
+                        if (score % 100 === 0) {
+                            gameSpeed += 0.7; 
+                            speedElement.innerText = Math.floor(gameSpeed * 15);
+                        }
+                    }
+                }
+
+                frames++;
+                if (frames % 55 === 0) {
+                    spawnObstacle();
+                }
+            }
+
+            if(playerImg.complete && playerImg.naturalHeight !== 0) {
+                ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+            } else {
+                ctx.fillStyle = "#c0392b";
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        update();
+    </script>
+</body>
+</html>

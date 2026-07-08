@@ -18,7 +18,7 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            touch-action: none; /* Mobilde ekran kaymasını kesin engeller */
+            touch-action: none; 
         }
 
         h1 { 
@@ -30,11 +30,19 @@
         }
         
         #scoreBoard {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             color: #f1c40f;
             text-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
+            background-color: rgba(0,0,0,0.5);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #34495e;
+        }
+
+        #scoreBoard span {
+            color: #ecf0f1;
         }
 
         canvas {
@@ -42,9 +50,9 @@
             border-radius: 12px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
             background-color: #151a24;
-            max-width: 100%; /* Telefon ekranına sığdırır */
+            max-width: 100%; 
             height: auto;
-            max-height: 75vh;
+            max-height: 72vh;
             touch-action: none;
         }
 
@@ -52,14 +60,16 @@
         
         @media (max-width: 600px) {
             h1 { font-size: 22px; }
-            p { display: none; } /* Mobilde yazıyı gizle, temiz dursun */
+            p { display: none; } 
         }
     </style>
 </head>
 <body>
 
     <h1>BATIN GECE YOLCUSU</h1>
-    <div id="scoreBoard">Mesafe: <span id="score">0</span> km</div>
+    <div id="scoreBoard">
+        Hız: <span id="speed">90</span> km/h &nbsp;|&nbsp; Mesafe: <span id="score">0</span> km
+    </div>
     
     <canvas id="gameCanvas" width="360" height="580"></canvas>
     
@@ -69,9 +79,10 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreElement = document.getElementById("score");
+        const speedElement = document.getElementById("speed"); 
 
         const playerImg = new Image();
-        playerImg.src = "araba.png"; 
+        playerImg.src = "araba.png.jpeg"; 
 
         const enemyImg = new Image();
         enemyImg.src = "engel.png"; 
@@ -97,7 +108,6 @@
 
         let obstacles = [];
 
-        // --- PC KONTROLLERİ ---
         document.addEventListener("keydown", (e) => {
             if (!gameActive && !gameOver) gameActive = true;
             if (e.key === "ArrowLeft") player.dx = -player.speed;
@@ -108,9 +118,8 @@
             if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
         });
 
-        // --- YENİ MOBİL DOKUNMATİK KONTROLLER ---
         canvas.addEventListener("touchstart", function(e) {
-            e.preventDefault(); // Sayfa kaymasını engelle
+            e.preventDefault(); 
             
             if (gameOver) {
                 location.reload();
@@ -120,24 +129,21 @@
                 gameActive = true;
             }
 
-            // Dokunulan yeri bul
             let rect = canvas.getBoundingClientRect();
             let touchX = e.touches[0].clientX - rect.left;
 
-            // Ekranın solu mu sağı mı?
             if (touchX < rect.width / 2) {
-                player.dx = -player.speed; // Sola kay
+                player.dx = -player.speed; 
             } else {
-                player.dx = player.speed;  // Sağa kay
+                player.dx = player.speed;  
             }
         }, { passive: false });
 
         canvas.addEventListener("touchend", function(e) {
             e.preventDefault();
-            player.dx = 0; // Parmağı çekince araba dursun
+            player.dx = 0; 
         }, { passive: false });
 
-        // PC için fareyle tıklama desteği
         canvas.addEventListener("mousedown", (e) => {
             if (gameOver) {
                 location.reload();
@@ -153,7 +159,6 @@
         });
         
         canvas.addEventListener("mouseup", () => { player.dx = 0; });
-
 
         function spawnObstacle() {
             let minX = 35;
@@ -199,85 +204,4 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ecf0f1";
                 ctx.font = "bold 20px Arial";
-                ctx.fillText("GECE YOLCULUĞU BAŞLIYOR", 45, 260);
-                ctx.fillStyle = "#e74c3c";
-                ctx.font = "16px Arial";
-                ctx.fillText("Başlamak için Ekrana Dokun", 70, 300);
-            }
-
-            if (gameOver) {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                if(crashImg.complete && crashImg.naturalHeight !== 0) {
-                    ctx.drawImage(crashImg, canvas.width/2 - 60, 150, 120, 120);
-                }
-
-                ctx.fillStyle = "#e74c3c";
-                ctx.font = "bold 28px Arial";
-                ctx.fillText("KAZA YAPILDI!", 85, 310);
-                ctx.fillStyle = "#ecf0f1";
-                ctx.font = "16px Arial";
-                ctx.fillText(`Toplam Mesafe: ${score} km`, 110, 340);
-                ctx.fillStyle = "#f1c40f";
-                ctx.fillText("Yeniden başlamak için dokun", 75, 380);
-                return; 
-            }
-
-            if (gameActive && !gameOver) {
-                player.x += player.dx;
-                if (player.x < 30) player.x = 30; 
-                if (player.x + player.width > canvas.width - 30) player.x = canvas.width - 30 - player.width; 
-
-                for (let i = 0; i < obstacles.length; i++) {
-                    let obs = obstacles[i];
-                    obs.y += gameSpeed; 
-
-                    if(enemyImg.complete && enemyImg.naturalHeight !== 0) {
-                        ctx.drawImage(enemyImg, obs.x, obs.y, obs.width, obs.height);
-                    } else {
-                        ctx.fillStyle = "#3498db";
-                        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                    }
-
-                    if (
-                        player.x < obs.x + obs.width &&
-                        player.x + player.width > obs.x &&
-                        player.y < obs.y + obs.height &&
-                        player.y + player.height > obs.y
-                    ) {
-                        gameOver = true; 
-                    }
-
-                    if (obs.y > canvas.height) {
-                        obstacles.splice(i, 1);
-                        score += 10;
-                        scoreElement.innerText = score;
-                        i--; 
-                        
-                        if (score % 100 === 0) {
-                            gameSpeed += 0.7; 
-                        }
-                    }
-                }
-
-                frames++;
-                if (frames % 55 === 0) {
-                    spawnObstacle();
-                }
-            }
-
-            if(playerImg.complete && playerImg.naturalHeight !== 0) {
-                ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
-            } else {
-                ctx.fillStyle = "#c0392b";
-                ctx.fillRect(player.x, player.y, player.width, player.height);
-            }
-
-            requestAnimationFrame(update);
-        }
-
-        update();
-    </script>
-</body>
-</html>
+                ctx.fillText("GECE

@@ -81,15 +81,15 @@
         const scoreElement = document.getElementById("score");
         const speedElement = document.getElementById("speed"); 
 
-        // UZANTILAR VE KLASÖR YOLLARI KÖKTEN DÜZELTİLDİ
-        const playerImg = new Image();
-        playerImg.src = "/game2/araba.png.jpeg"; 
+        // sıkoda foto
+       const playerImg = new Image();
+        playerImg.src = "./araba.png.jpg"; // "e" harfini sildik, tam resimdeki gibi oldu
 
         const enemyImg = new Image();
-        enemyImg.src = "/game2/engel.png.jpeg"; 
+        enemyImg.src = "./engel.png.jpg"; // "e" harfini sildik, tam resimdeki gibi oldu
 
         const crashImg = new Image();
-        crashImg.src = "/game2/kaza.png.jpeg"; 
+        crashImg.src = "./kaza.png.jpeg"; // Bu zaten .jpeg yüklenmiş, aynen kalıyor 
 
         let frames = 0;
         let score = 0;

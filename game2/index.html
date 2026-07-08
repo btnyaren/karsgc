@@ -1,1 +1,114 @@
-a
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çalıştay Trafik Oyunu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 { margin-bottom: 5px; }
+        
+        #scoreBoard {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+
+        canvas {
+            background-color: #34495e;
+            border: 4px solid #ecf0f1;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        p { color: #bdc3c7; font-size: 14px; margin-top: 15px; }
+        .mobile-btn {
+            display: none;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Telefonda girenler için butonları göster */
+        @media (max-width: 600px) {
+            .mobile-btn { display: inline-block; }
+            p { display: none; } /* PC yazısını gizle */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Trafik Canavarı</h1>
+    <div id="scoreBoard">Puan: <span id="score">0</span></div>
+    
+    <canvas id="gameCanvas" width="350" height="550"></canvas>
+    
+    <p>Kontrol: <b>Sol ve Sağ Ok Tuşları</b> (Yeniden başlamak için sayfayı yenile)</p>
+
+    <div>
+        <button class="mobile-btn" id="btnLeft">SOL</button>
+        <button class="mobile-btn" id="btnRight">SAĞ</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreElement = document.getElementById("score");
+
+        let frames = 0;
+        let score = 0;
+        let gameOver = false;
+        let gameSpeed = 5;
+
+        const player = {
+            x: 150, 
+            y: 450, 
+            width: 50,
+            height: 80,
+            speed: 6, 
+            dx: 0     
+        };
+
+        const obstacles = [];
+
+        // PC Kontrolleri
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") player.dx = -player.speed;
+            else if (e.key === "ArrowRight") player.dx = player.speed;
+        });
+
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
+        });
+
+        // Mobil Kontroller
+        const btnLeft = document.getElementById("btnLeft");
+        const btnRight = document.getElementById("btnRight");
+
+        btnLeft.addEventListener("touchstart", (e) => { e.preventDefault(); player.dx = -player.speed; });
+        btnLeft.addEventListener("touchend", (e) => { e.preventDefault(); player.dx = 0; });
+        btnLeft.addEventListener("mousedown", () => { player.dx = -player.speed; });
+        btnLeft.addEventListener("mouseup", () => { player.dx = 0; });
+
+        btnRight.addEventListener("touchstart", (e) => { e.preventDefault(); player.dx = player.speed; });
+        btnRight.addEventListener("

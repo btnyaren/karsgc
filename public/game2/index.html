@@ -2,13 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Batın Gece Yolcusu</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #0b0f19; /* Gece gökyüzü rengi */
+            background-color: #0b0f19; 
             color: #ecf0f1;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
@@ -18,18 +18,19 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            touch-action: none; /* Mobilde ekran kaymasını kesin engeller */
         }
 
         h1 { 
             margin-bottom: 5px; 
-            font-size: 28px;
+            font-size: 26px;
             letter-spacing: 2px;
             color: #e74c3c;
             text-shadow: 0 0 10px rgba(231, 76, 60, 0.6);
         }
         
         #scoreBoard {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 15px;
             color: #f1c40f;
@@ -40,29 +41,18 @@
             border: 4px solid #34495e;
             border-radius: 12px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            cursor: pointer;
+            background-color: #151a24;
+            max-width: 100%; /* Telefon ekranına sığdırır */
+            height: auto;
+            max-height: 75vh;
+            touch-action: none;
         }
 
         p { color: #7f8c8d; font-size: 14px; margin-top: 15px; }
         
-        .mobile-btn {
-            display: none;
-            margin: 15px 10px;
-            padding: 18px 35px;
-            font-size: 20px;
-            font-weight: bold;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            border: 2px solid #34495e;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .mobile-btn:active { background-color: #e74c3c; }
-
         @media (max-width: 600px) {
-            .mobile-btn { display: inline-block; }
-            p { display: none; }
+            h1 { font-size: 22px; }
+            p { display: none; } /* Mobilde yazıyı gizle, temiz dursun */
         }
     </style>
 </head>
@@ -73,26 +63,29 @@
     
     <canvas id="gameCanvas" width="360" height="580"></canvas>
     
-    <p>Kontrol: <b>Sol ve Sağ Ok Tuşları</b> <br> (Yeniden başlamak için ekrana tıkla)</p>
-
-    <div>
-        <button class="mobile-btn" id="btnLeft">◀ SOL</button>
-        <button class="mobile-btn" id="btnRight">SAĞ ▶</button>
-    </div>
+    <p>PC: <b>Sol/Sağ Yön Tuşları</b> | Mobil: <b>Ekranın Sağına/Soluna Dokun</b></p>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreElement = document.getElementById("score");
 
+        const playerImg = new Image();
+        playerImg.src = "araba.png"; 
+
+        const enemyImg = new Image();
+        enemyImg.src = "engel.png"; 
+
+        const crashImg = new Image();
+        crashImg.src = "kaza.png"; 
+
         let frames = 0;
         let score = 0;
         let gameOver = false;
-        let gameActive = false; // Oyun tıklayınca başlasın
+        let gameActive = false; 
         let gameSpeed = 6;
-        let roadOffset = 0; // Yol çizgilerinin akışı için
+        let roadOffset = 0; 
 
-        // Bizim Oyuncu Arabası
         const player = {
             x: 155, 
             y: 460, 
@@ -104,7 +97,7 @@
 
         let obstacles = [];
 
-        // Kontroller
+        // --- PC KONTROLLERİ ---
         document.addEventListener("keydown", (e) => {
             if (!gameActive && !gameOver) gameActive = true;
             if (e.key === "ArrowLeft") player.dx = -player.speed;
@@ -115,29 +108,54 @@
             if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
         });
 
-        const btnLeft = document.getElementById("btnLeft");
-        const btnRight = document.getElementById("btnRight");
-
-        btnLeft.addEventListener("touchstart", (e) => { e.preventDefault(); if(!gameActive) gameActive=true; player.dx = -player.speed; });
-        btnLeft.addEventListener("touchend", (e) => { e.preventDefault(); player.dx = 0; });
-        btnLeft.addEventListener("mousedown", () => { if(!gameActive) gameActive=true; player.dx = -player.speed; });
-        btnLeft.addEventListener("mouseup", () => { player.dx = 0; });
-
-        btnRight.addEventListener("touchstart", (e) => { e.preventDefault(); if(!gameActive) gameActive=true; player.dx = player.speed; });
-        btnRight.addEventListener("touchend", (e) => { e.preventDefault(); player.dx = 0; });
-        btnRight.addEventListener("mousedown", () => { if(!gameActive) gameActive=true; player.dx = player.speed; });
-        btnRight.addEventListener("mouseup", () => { player.dx = 0; });
-
-        canvas.addEventListener("click", () => {
+        // --- YENİ MOBİL DOKUNMATİK KONTROLLER ---
+        canvas.addEventListener("touchstart", function(e) {
+            e.preventDefault(); // Sayfa kaymasını engelle
+            
             if (gameOver) {
                 location.reload();
-            } else if (!gameActive) {
+                return;
+            }
+            if (!gameActive) {
                 gameActive = true;
             }
+
+            // Dokunulan yeri bul
+            let rect = canvas.getBoundingClientRect();
+            let touchX = e.touches[0].clientX - rect.left;
+
+            // Ekranın solu mu sağı mı?
+            if (touchX < rect.width / 2) {
+                player.dx = -player.speed; // Sola kay
+            } else {
+                player.dx = player.speed;  // Sağa kay
+            }
+        }, { passive: false });
+
+        canvas.addEventListener("touchend", function(e) {
+            e.preventDefault();
+            player.dx = 0; // Parmağı çekince araba dursun
+        }, { passive: false });
+
+        // PC için fareyle tıklama desteği
+        canvas.addEventListener("mousedown", (e) => {
+            if (gameOver) {
+                location.reload();
+                return;
+            }
+            if (!gameActive) {
+                gameActive = true;
+            }
+            let rect = canvas.getBoundingClientRect();
+            let clickX = e.clientX - rect.left;
+            if (clickX < rect.width / 2) player.dx = -player.speed;
+            else player.dx = player.speed;
         });
+        
+        canvas.addEventListener("mouseup", () => { player.dx = 0; });
+
 
         function spawnObstacle() {
-            // Şeritlere hizalı rastgele araç çıkarma (Yol içi: 30px ile canvas.width-80px arası)
             let minX = 35;
             let maxX = canvas.width - 85;
             let obstacleX = Math.random() * (maxX - minX) + minX;
@@ -146,45 +164,37 @@
                 x: obstacleX,
                 y: -100, 
                 width: 48,
-                height: 80,
-                color: ["#2980b9", "#27ae60", "#8e44ad", "#f39c12"][Math.floor(Math.random() * 4)] // Rastgele trafik rengi
+                height: 80
             });
         }
 
         function drawRoad() {
-            // Zifiri Gece Asfaltı
             ctx.fillStyle = "#151a24";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Yolun kenarındaki yeşillik/toprak alan sınırları
             ctx.fillStyle = "#0d1117";
             ctx.fillRect(0, 0, 25, canvas.height);
             ctx.fillRect(canvas.width - 25, 0, 25, canvas.height);
 
-            // Sol ve Sağ Sarı Emniyet Şeritleri
             ctx.fillStyle = "#f1c40f";
             ctx.fillRect(25, 0, 4, canvas.height);
             ctx.fillRect(canvas.width - 29, 0, 4, canvas.height);
 
-            // Akan Kesik Yol Çizgileri (Yol Efekti)
             ctx.fillStyle = "#ffffff";
             if (gameActive && !gameOver) {
                 roadOffset += gameSpeed;
                 if (roadOffset > 60) roadOffset = 0;
             }
             
-            // Orta kesik çizgiler
             for (let y = -60 + roadOffset; y < canvas.height; y += 60) {
                 ctx.fillRect(canvas.width / 2 - 2, y, 4, 30);
             }
         }
 
         function update() {
-            // Sahneyi çiz
             drawRoad();
 
             if (!gameActive && !gameOver) {
-                // Giriş Ekranı Tasarımı
                 ctx.fillStyle = "rgba(11, 15, 25, 0.85)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = "#ecf0f1";
@@ -192,44 +202,44 @@
                 ctx.fillText("GECE YOLCULUĞU BAŞLIYOR", 45, 260);
                 ctx.fillStyle = "#e74c3c";
                 ctx.font = "16px Arial";
-                ctx.fillText("Başlamak için Dokun veya Tuşa Bas", 50, 300);
+                ctx.fillText("Başlamak için Ekrana Dokun", 70, 300);
             }
 
             if (gameOver) {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                if(crashImg.complete && crashImg.naturalHeight !== 0) {
+                    ctx.drawImage(crashImg, canvas.width/2 - 60, 150, 120, 120);
+                }
+
                 ctx.fillStyle = "#e74c3c";
                 ctx.font = "bold 28px Arial";
-                ctx.fillText("KAZA YAPILDI!", 85, 260);
+                ctx.fillText("KAZA YAPILDI!", 85, 310);
                 ctx.fillStyle = "#ecf0f1";
                 ctx.font = "16px Arial";
-                ctx.fillText(`Toplam Mesafe: ${score} km`, 110, 300);
+                ctx.fillText(`Toplam Mesafe: ${score} km`, 110, 340);
                 ctx.fillStyle = "#f1c40f";
-                ctx.fillText("Yeniden başlamak için tıkla", 85, 340);
+                ctx.fillText("Yeniden başlamak için dokun", 75, 380);
                 return; 
             }
 
             if (gameActive && !gameOver) {
-                // Oyuncu hareketi ve sınır kontrolü
                 player.x += player.dx;
                 if (player.x < 30) player.x = 30; 
                 if (player.x + player.width > canvas.width - 30) player.x = canvas.width - 30 - player.width; 
 
-                // Trafiği yönet
                 for (let i = 0; i < obstacles.length; i++) {
                     let obs = obstacles[i];
                     obs.y += gameSpeed; 
 
-                    // ENGELLERİ ÇİZ (Diğer Arabalar)
-                    ctx.fillStyle = obs.color;
-                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                    
-                    // Gece Sürüşü: Diğer arabaların kırmızı arka stop lambaları
-                    ctx.fillStyle = "#ff2200";
-                    ctx.fillRect(obs.x + 4, obs.y + obs.height - 4, 8, 4); // Sol stop
-                    ctx.fillRect(obs.x + obs.width - 12, obs.y + obs.height - 4, 8, 4); // Sağ stop
+                    if(enemyImg.complete && enemyImg.naturalHeight !== 0) {
+                        ctx.drawImage(enemyImg, obs.x, obs.y, obs.width, obs.height);
+                    } else {
+                        ctx.fillStyle = "#3498db";
+                        ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                    }
 
-                    // Çarpışma kontrolü
                     if (
                         player.x < obs.x + obs.width &&
                         player.x + player.width > obs.x &&
@@ -239,7 +249,6 @@
                         gameOver = true; 
                     }
 
-                    // Skoru arttır ve engeli sil
                     if (obs.y > canvas.height) {
                         obstacles.splice(i, 1);
                         score += 10;
@@ -247,34 +256,27 @@
                         i--; 
                         
                         if (score % 100 === 0) {
-                            gameSpeed += 0.7; // Hızlanma
+                            gameSpeed += 0.7; 
                         }
                     }
                 }
 
-                // Belirli aralıklarla araç çıkar
                 frames++;
                 if (frames % 55 === 0) {
                     spawnObstacle();
                 }
             }
 
-            // BİZİM ARACI ÇİZ (Kırmızı Gece Yolcusu)
-            ctx.fillStyle = "#c0392b";
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            // Ön cam tasarımı
-            ctx.fillStyle = "#2c3e50";
-            ctx.fillRect(player.x + 4, player.y + 15, player.width - 8, 15);
-            
-            // Gece Sürüşü: Bizim arabanın yolu aydınlatan SARI GECE FARLARI
-            ctx.fillStyle = "#fffdd0";
-            ctx.fillRect(player.x + 4, player.y - 6, 8, 6); // Sol Far
-            ctx.fillRect(player.x + player.width - 12, player.y - 6, 8, 6); // Sağ Far
+            if(playerImg.complete && playerImg.naturalHeight !== 0) {
+                ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+            } else {
+                ctx.fillStyle = "#c0392b";
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+            }
 
             requestAnimationFrame(update);
         }
 
-        // Oyunu ilk kez yükle
         update();
     </script>
 </body>
